@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:auth_buttons/auth_buttons.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn();
 
@@ -89,12 +90,15 @@ class HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
           const Text("You are not currently signed in."),
-          ElevatedButton(
-            child: const Text('SIGN IN WITH GOOGLE'),
+          GoogleAuthButton(
             onPressed: _handleSignIn,
+            darkMode: false,
+            style: AuthButtonStyle(
+              iconType: AuthIconType.secondary,
+              buttonColor: Colors.transparent,
+            ), // if true second example
           ),
-          ElevatedButton(
-            child: const Text('SIGN IN WITH FACEBOOK'),
+          FacebookAuthButton(
             onPressed: () async {
               FacebookAuth.instance.login(permissions: [
                 "public_profile",
@@ -108,6 +112,11 @@ class HomePageState extends State<HomePage> {
                     })
                   });
             },
+            darkMode: false,
+            style: AuthButtonStyle(
+              iconType: AuthIconType.secondary,
+              buttonColor: Colors.lightBlueAccent,
+            ), // if true second example
           ),
         ],
       );
