@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:auth_buttons/auth_buttons.dart';
+import 'package:flutter/cupertino.dart';
 
 GoogleSignIn _googleSignIn = GoogleSignIn();
 
@@ -54,13 +55,33 @@ class HomePageState extends State<HomePage> {
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          GoogleUserCircleAvatar(
-            identity: user,
+          Container(
+            width: 200,
+            height: 200,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                    fit: BoxFit.fill,
+                    image: NetworkImage(_currentUser!.photoUrl ?? ''))),
           ),
-          Text(user.displayName ?? ''),
-          Text(user.email),
-          const Text("Signed in successfully."),
-          ElevatedButton(
+          Padding(padding: EdgeInsets.only(top: 15)),
+          Text(
+            user.displayName ?? '',
+            style: TextStyle(fontSize: 22),
+          ),
+          Padding(padding: EdgeInsets.only(top: 8)),
+          Text(
+            user.email,
+            style: TextStyle(fontSize: 18),
+          ),
+          Padding(padding: EdgeInsets.only(top: 25)),
+          const Text(
+            "Signed in successfully.",
+            style: TextStyle(fontSize: 18),
+          ),
+          Padding(padding: EdgeInsets.only(top: 20)),
+          CupertinoButton(
+            color: Colors.blue,
             child: const Text('SIGN OUT'),
             onPressed: _handleSignOut,
           ),
@@ -69,34 +90,61 @@ class HomePageState extends State<HomePage> {
     }
     if (_isLoggedIn == true) {
       return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.network(_userObj["picture"]["data"]["url"]),
-          Text(_userObj["name"]),
-          Text(_userObj["email"]),
-          ElevatedButton(
-              onPressed: () {
-                FacebookAuth.instance.logOut().then((value) => {
-                      setState(() {
-                        _isLoggedIn = false;
-                        _userObj = {};
-                      })
-                    });
-              },
-              child: Text("Logout"))
+          Container(
+            width: 200,
+            height: 200,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                    fit: BoxFit.fill,
+                    image: NetworkImage(_userObj["picture"]["data"]["url"]))),
+          ),
+          Text(
+            _userObj["name"],
+            style: TextStyle(fontSize: 30),
+          ),
+          Text(
+            _userObj["email"],
+            style: TextStyle(fontSize: 20),
+          ),
+          Padding(
+              padding: EdgeInsets.only(top: 25),
+              child: CupertinoButton(
+                  color: Colors.blue,
+                  onPressed: () {
+                    FacebookAuth.instance.logOut().then((value) => {
+                          setState(() {
+                            _isLoggedIn = false;
+                            _userObj = {};
+                          })
+                        });
+                  },
+                  child: Text("Logout"))),
         ],
       );
     } else {
       return Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          const Text("You are not currently signed in."),
-          GoogleAuthButton(
-            onPressed: _handleSignIn,
-            darkMode: false,
-            style: AuthButtonStyle(
-              iconType: AuthIconType.secondary,
-              buttonColor: Colors.transparent,
-            ), // if true second example
+          Padding(
+            padding: EdgeInsets.only(bottom: 70),
+            child: const Text(
+              "You are not currently signed in.",
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(bottom: 25),
+            child: GoogleAuthButton(
+              onPressed: _handleSignIn,
+              darkMode: false,
+              style: AuthButtonStyle(
+                iconType: AuthIconType.secondary,
+                buttonColor: Colors.transparent,
+              ), // if true second example
+            ),
           ),
           FacebookAuthButton(
             onPressed: () async {
@@ -114,7 +162,7 @@ class HomePageState extends State<HomePage> {
             },
             darkMode: false,
             style: AuthButtonStyle(
-              iconType: AuthIconType.secondary,
+              iconType: AuthIconType.outlined,
               buttonColor: Colors.lightBlueAccent,
             ), // if true second example
           ),
